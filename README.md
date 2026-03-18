@@ -128,6 +128,8 @@ Puertos locales:
 
 La configuracion de nube queda preparada para desplegar sin Eureka, usando URLs directas entre servicios, PostgreSQL en Cloud SQL y Kafka administrado.
 
+Si despliegas desde la UI de Cloud Run conectando este repositorio directamente, la raiz del repo ahora construye `api-gateway` por defecto mediante el `Dockerfile` raiz. Eso evita que Cloud Run intente compilar el `pom.xml` agregador como si fuera una aplicacion ejecutable.
+
 ### Archivos incluidos
 
 - `cloudbuild.yaml`: build de imagenes hacia Artifact Registry.
@@ -157,6 +159,16 @@ La configuracion de nube queda preparada para desplegar sin Eureka, usando URLs 
 ```bash
 gcloud builds submit --config cloudbuild.yaml
 ```
+
+### Despliegue rapido desde repositorio
+
+Si solo quieres publicar la API de entrada desde la UI de Cloud Run:
+
+1. Conecta este repositorio.
+2. Usa la raiz del repo.
+3. Deja que Cloud Run use el `Dockerfile` raiz.
+
+Ese flujo construye `api-gateway` en el puerto `8080`.
 
 ### Despliegue
 

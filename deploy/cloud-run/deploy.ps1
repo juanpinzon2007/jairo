@@ -2,7 +2,7 @@ $ErrorActionPreference = "Stop"
 
 param(
     [string]$ProjectId,
-    [string]$Region = "us-central1",
+    [string]$Region = "europe-west1",
     [string]$Repository = "inventory-microservices",
     [string]$ImageTag = "latest"
 )
