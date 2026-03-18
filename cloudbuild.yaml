@@ -1,0 +1,21 @@
+substitutions:
+  _REGION: us-central1
+  _REPOSITORY: inventory-microservices
+
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args: ["build", "-f", "api-gateway/Dockerfile", "-t", "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/api-gateway:$COMMIT_SHA", "."]
+  - name: gcr.io/cloud-builders/docker
+    args: ["build", "-f", "user-service/Dockerfile", "-t", "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/user-service:$COMMIT_SHA", "."]
+  - name: gcr.io/cloud-builders/docker
+    args: ["build", "-f", "catalog-service/Dockerfile", "-t", "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/catalog-service:$COMMIT_SHA", "."]
+  - name: gcr.io/cloud-builders/docker
+    args: ["build", "-f", "inventory-service/Dockerfile", "-t", "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/inventory-service:$COMMIT_SHA", "."]
+  - name: gcr.io/cloud-builders/docker
+    args: ["build", "-f", "report-service/Dockerfile", "-t", "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/report-service:$COMMIT_SHA", "."]
+images:
+  - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/api-gateway:$COMMIT_SHA
+  - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/user-service:$COMMIT_SHA
+  - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/catalog-service:$COMMIT_SHA
+  - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/inventory-service:$COMMIT_SHA
+  - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/report-service:$COMMIT_SHA

@@ -1,0 +1,61 @@
+server:
+  port: ${SERVER_PORT:8084}
+
+spring:
+  application:
+    name: report-service
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5436/report_db}
+    username: ${SPRING_DATASOURCE_USERNAME:report_service}
+    password: ${SPRING_DATASOURCE_PASSWORD:report_service}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+  kafka:
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:kafka:9092}
+    consumer:
+      group-id: ${SPRING_KAFKA_CONSUMER_GROUP_ID:report-service}
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+    properties:
+      spring:
+        json:
+          trusted:
+            packages: com.jairo.inventory.shared.events
+          value:
+            default:
+              type: com.jairo.inventory.shared.events.InventoryMovementEvent
+      security.protocol: ${SPRING_KAFKA_PROPERTIES_SECURITY_PROTOCOL:PLAINTEXT}
+      sasl.mechanism: ${SPRING_KAFKA_PROPERTIES_SASL_MECHANISM:}
+      sasl.jaas.config: ${SPRING_KAFKA_PROPERTIES_SASL_JAAS_CONFIG:}
+
+security:
+  jwt:
+    secret: ${SECURITY_JWT_SECRET:inventory-secret-key-insecure-change-me-2026}
+    access-token-minutes: ${SECURITY_JWT_ACCESS_TOKEN_MINUTES:240}
+    issuer: ${SECURITY_JWT_ISSUER:inventory-platform}
+
+eureka:
+  client:
+    enabled: ${EUREKA_CLIENT_ENABLED:true}
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka}
+
+clients:
+  catalog:
+    url: ${CLIENTS_CATALOG_URL:http://catalog-service:8082}
+
+app:
+  kafka:
+    topics:
+      inventory-movements: ${APP_KAFKA_TOPIC_INVENTORY_MOVEMENTS:inventory.movements}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
